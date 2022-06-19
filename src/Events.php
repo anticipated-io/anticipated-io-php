@@ -178,10 +178,11 @@ class Events
         if (count($config) > 0) {
             $this->applyConfig($config);
         }
-        $ch = curl_init('https://dev-api.anticipated.io/v1/event' . $id);
+        $ch = curl_init('https://dev-api.anticipated.io/v1/event/' . $id);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLINFO_HEADER_OUT, true);
         curl_setopt($ch, CURLOPT_POST, false);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
 
         curl_setopt(
             $ch,
@@ -193,6 +194,7 @@ class Events
         );
 
         $result = json_decode(curl_exec($ch));
+        $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
         $responses = array_map(function ($response) {
@@ -202,16 +204,22 @@ class Events
                 $response->body,
                 new \DateTime($response->date),
             );
-        }, $result);
+        }, property_exists($result, 'responses') ? $result->responses : []);
 
+        if ($statusCode >= 200 && $statusCode < 300) {
+            return new Result(
+                $statusCode === 200,
+                $statusCode,
+                new \DateTime($result->now),
+                $result->context->user,
+                $result->context->company,
+                new Event($result->event->id, $result->event->company, new \DateTime($result->event->when), $result->event->type, new EventDetails($result->event->details)),
+                $responses
+            );
+        }
         return new Result(
-            $result->request->id !== '',
-            curl_getinfo($ch, CURLINFO_HTTP_CODE), /* status code */
-            new \DateTime($result->now),
-            $result->context->user,
-            $result->context->company,
-            new Event($result->event->id, $result->event->company, new \DateTime($result->event->when), $result->event->type, new EventDetails($result->event->details)),
-            $responses
+            false,
+            $statusCode
         );
     }
 }
