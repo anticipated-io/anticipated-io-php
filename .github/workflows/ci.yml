@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: Testing
     env:
-      - CI=true
+      - CI: true
       - ANTICIPATED_IO_KEY: ${{ secrets.ANTICIPATED_IO_KEY }}
       - SQS_URL: ${{ secrets.SQS_URL }}
     steps:
