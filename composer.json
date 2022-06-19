@@ -1,0 +1,41 @@
+{
+  "name": "anticipated-io/anticipated-io-php",
+  "type": "library",
+  "version": "1.0.0",
+  "description": "Provides a PHP SDK for accessing the anticipated.io API event service",
+  "keywords": [
+    "anticipated.io",
+    "delayed events",
+    "event service",
+    "event queue",
+    "scheduler",
+    "scheduling",
+    "event scheduler"
+  ],
+  "homepage": "https://anticipated.io/",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Chris Schuld",
+      "email": "cbschuld@anticipated.io",
+      "homepage": "https://anticipated.io/"
+    }
+  ],
+  "require-dev": {
+    "phpunit/phpunit": "^9"
+  },
+  "autoload": {
+    "psr-4": {
+      "AnticipatedIO\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "AnticipatedIO\\Tests\\": "tests/"
+    }
+  },
+  "require": {
+    "ext-curl": "*",
+    "ext-json": "*"
+  }
+}

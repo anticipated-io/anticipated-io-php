@@ -1,0 +1,8 @@
+# remove phpStorm pathing
+.idea
+
+# remove composer paths
+vendor
+
+# remove phpunit caching
+.phpunit.result.cache
