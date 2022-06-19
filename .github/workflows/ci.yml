@@ -6,14 +6,13 @@ jobs:
   build-test:
     runs-on: ubuntu-latest
     environment: Testing
+    env:
+      ANTICIPATED_IO_KEY: ${{ secrets.ANTICIPATED_IO_KEY }}
+      SQS_URL: ${{ secrets.SQS_URL }}
     steps:
       - uses: actions/checkout@v3
       - uses: php-actions/composer@v6
       - name: PHPUnit Tests
-        env:
-          - CI: true
-          - ANTICIPATED_IO_KEY: ${{ secrets.ANTICIPATED_IO_KEY }}
-          - SQS_URL: ${{ secrets.SQS_URL }}
         uses: php-actions/phpunit@v3
         with:
           bootstrap: vendor/autoload.php
